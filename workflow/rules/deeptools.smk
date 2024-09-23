@@ -14,7 +14,7 @@ rule bigwig:
     resources:
         runtime=30,
     conda:
-        "../envs/deeptools.yml"
+        "../envs/deeptools.yaml"
     shell:
         "bamCoverage "
         "-b {input.bam} "
@@ -39,7 +39,7 @@ rule bigwig_summary:
     resources:
         runtime=60,
     conda:
-        "../envs/deeptools.yml"
+        "../envs/deeptools.yaml"
     shell:
         "multiBigwigSummary "
         "-b {input.bw} "
