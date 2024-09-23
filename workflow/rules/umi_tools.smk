@@ -16,7 +16,7 @@ rule extract_umi:
         "logs/umi_tools/extract/{sample}.log"
     shell:
         "umi_tools extract "
-        "-p {params.p}"
+        "-p {params.p} "
         "-I {input.r2} "
         "-S {output.r2} "
         "--read2-in {input.r1} "
