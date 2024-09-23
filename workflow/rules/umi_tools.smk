@@ -21,7 +21,7 @@ rule extract_umi:
         "-S {output.r2} "
         "--read2-in {input.r1} "
         "--read2-out {output.r1} "
-        "{log}"
+        "> {log} 2>&1"
 
 
 rule dedup_umi:
@@ -41,4 +41,4 @@ rule dedup_umi:
         "-I {input} "
         "-S {output} "
         "--paired "
-        "{log}"
+        "> {log} 2>&1"
