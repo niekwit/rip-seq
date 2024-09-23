@@ -41,7 +41,7 @@ rule hisat2_index:
     params:
         prefix = f"resources/index_{resources.genome}",
     log:
-        "logs/hisat2_index_{genome}.log"
+        f"logs/hisat2_index_{resources.genome}.log"
     threads: 36
     resources:
         runtime=90,
