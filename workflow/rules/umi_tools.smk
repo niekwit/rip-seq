@@ -11,7 +11,7 @@ rule extract_umi:
     resources:
         runtime=60,
     conda:
-        "..envs/umi_tools.yaml"
+        "../envs/umi_tools.yaml"
     log:
         "logs/umi_tools/extract/{sample}.log"
     shell:
@@ -33,7 +33,7 @@ rule dedup_umi:
     resources:
         runtime=60,
     conda:
-        "..envs/umi_tools.yaml"
+        "../envs/umi_tools.yaml"
     log:
         "logs/umi_tools/dedup/{sample}.log"
     shell:

@@ -8,7 +8,7 @@ rule get_fasta:
         "logs/resources/get_fasta.log"
     cache: False
     conda:
-        "../envs/deeptools.yml"
+        "../envs/deeptools.yaml"
     resources: 
         runtime=15
     script:
