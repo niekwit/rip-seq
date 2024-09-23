@@ -1,5 +1,11 @@
 def targets():
-    pass
+    TARGETS = [
+        "results/plots/PCA.pdf",
+        "results/plots/scree.pdf"
+        ]
+
+    return TARGETS
+
 
 def samples():
     """
@@ -8,7 +14,7 @@ def samples():
     csv = pd.read_csv("config/samples.csv")
     SAMPLES = csv["sample"].tolist()
     SAMPLES.extend(csv["control"].unique().tolist())
-    
+
     # Check if samples from samples.csv match fastq files (both R1 and R2) in reads folder
     not_found = []
     for sample in SAMPLES:
