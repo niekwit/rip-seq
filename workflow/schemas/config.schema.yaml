@@ -1,0 +1,55 @@
+$schema: "http://json-schema.org/draft-06/schema#"
+
+description: Snakemake configuration file
+
+type: object
+
+properties:
+  genome:
+    type: string
+    enum: ["hg38", "hg19", "mm10", "mm9", "dm3", "dm6"]
+    description: Genome assembly to use
+  
+  ensembl_genome_build:
+    type: integer
+    description: Ensembl genome build version
+
+  umi_tools:
+    type: object
+    properties:
+      pattern:
+        type: string
+        description: UMI pattern
+    required:
+      - pattern
+  
+  cutadapt:
+    type: object
+    properties:
+      adapters:
+        type: string
+        description: Adapter sequences
+      extra:
+        type: string
+        description: Additional options for cutadapt
+    required:
+      - adapters
+      - extra
+
+  bigwig:
+    type: object
+    properties:
+      binSize:
+        type: integer
+        description: Bin size for bigWig files
+      normalizeUsing:
+        type: string
+        enum: ["RPKM", "CPM", "BPM", "RPGC", "None"]
+        description: Normalization method
+      extendReads:
+        type: string
+        description: Extend reads by this amount
+    required:
+      - binSize
+      - normalizeUsing
+      - extendReads
