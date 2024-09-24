@@ -39,7 +39,7 @@ rule hisat2_index:
     output:
         directory(f"resources/index_{resources.genome}"),
     params:
-        prefix = f"resources/index_{resources.genome}",
+        prefix = f"resources/index_{resources.genome}/index",
     log:
         f"logs/hisat2_index_{resources.genome}.log"
     threads: 36
