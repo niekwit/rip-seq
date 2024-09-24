@@ -26,7 +26,8 @@ rule extract_umi:
 
 rule dedup_umi:
     input:
-        "results/mapped/sorted/{sample}.bam",
+        bam="results/mapped/sorted/{sample}.bam",
+        bai="results/mapped/sorted/{sample}.bam.bai",
     output:
         "results/mapped/dedup/{sample}.bam",
     threads: 4
@@ -38,7 +39,8 @@ rule dedup_umi:
         "logs/umi_tools/dedup/{sample}.log"
     shell:
         "umi_tools dedup "
-        "-I {input} "
+        "-I {input.bam} "
         "-S {output} "
         "--paired "
+        "--unpaired-reads=discard "
         "> {log} 2>&1"
