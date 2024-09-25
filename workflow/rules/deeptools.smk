@@ -123,3 +123,48 @@ rule plot_PCA:
         "../envs/r.yaml"
     script:
         "../scripts/plot_PCA.R"
+
+
+rule fragment_lengths:
+    input:
+        bam=expand("results/mapped/sorted/{sample}.bam", sample=SAMPLES),
+        bai=expand("results/mapped/sorted/{sample}.bam.bai", sample=SAMPLES),
+    output:
+        "results/deeptools/fragment_lengths.tab",
+    params:
+        labels=lambda wildcards, input: [os.path.basename(x).replace(".bam", "") for x in input],
+        extra="",
+    log:
+        "logs/deeptools/fragment_lengths.log",
+    threads: 12
+    resources:
+        runtime=45
+    conda:
+        "../envs/deeptools.yaml"
+    shell:
+        "bamPEFragmentSize "
+        "--bamfiles {input.bam} "
+        "--numberOfProcessors {threads} "
+        "--samplesLabel {params.labels} "
+        "--maxFragmentLength 1000 "
+        "--outRawFragmentLengths {output} "
+        "{params.extra} "
+        "> {log} 2>&1"
+
+
+rule plot_fragment_lengths:
+    input:
+        "results/deeptools/fragment_lengths.tab",
+    output:
+        plot=report("results/plots/fragment_lengths.pdf", caption="../report/fragment_lengths.rst", category="Fragment lengths"),
+    params:
+        extra="",
+    threads: 1
+    resources:
+        runtime=10
+    log:
+        "logs/plotting/fragment_lengths.log"
+    conda:
+        "../envs/r.yaml"
+    script:
+        "../scripts/plot_fragment_lengths.R"
