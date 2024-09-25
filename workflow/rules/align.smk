@@ -2,13 +2,16 @@ rule hisat2_align:
     input:
         reads=["results/trimmed/{sample}_R1_001.umi.fastq.gz", 
                "results/trimmed/{sample}_R2_001.umi.fastq.gz"],
-        idx=f"resources/index_{resources.genome}",
+        idx=f"resources/index_{resources.genome}/",
     output:
         "results/mapped/{sample}.bam",
-    log:
-        "logs/hisat2_align_{sample}.log",
     params:
+        idx=f"resources/index_{resources.genome}/index",
         extra="",
+    log:
+        "logs/hisat2/align/{sample}.log",
+    params:
+        extra="-X 1000",
     threads: 12
     resources:
         runtime=60,
@@ -51,3 +54,21 @@ use rule index_bam as index_dedup_bam with:
         "results/mapped/dedup/{sample}.bam.bai",
     log:
         "logs/samtools/index/dedup_{sample}.log"
+
+
+rule plot_alignment_rates:
+    input:
+        expand("logs/hisat2/align/{sample}.log", sample=SAMPLES),
+    output:
+        "results/plots/alignment_rates.pdf",
+    params:
+        extra="",
+    log:
+        "logs/hisat2/plot_alignment_rates.log",
+    threads: 1
+    resources:
+        runtime=5,
+    conda:
+        "../envs/r.yaml"
+    script:
+        "../scripts/plot_alignment_rates.R"
