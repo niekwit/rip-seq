@@ -39,7 +39,7 @@ rule filter_bam:
     shell:
         "samtools view -h {input} | "
         "awk 'substr($0,1,1)=="
-        '"@" || ($9>= {params.lower_cutoff} && $9<={params.upper_cutoff}) || '
+        '"@" || ($9>={params.lower_cutoff} && $9<={params.upper_cutoff}) || '
         "($9<={params.lower_cutoff} && $9>=-{params.upper_cutoff})'"
         " | samtools view -b - > {output}"
 
