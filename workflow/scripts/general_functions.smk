@@ -1,8 +1,18 @@
 def targets():
     TARGETS = [
         "results/plots/PCA.pdf",
-        "results/plots/scree.pdf"
+        "results/plots/scree.pdf",
+        "results/plots/alignment_rates.pdf",
+        expand("results/bigwig/average_bw/{sample_group}.bw", sample_group=conditions(exclude_controls=False)),
         ]
+
+    if config["macs2"]["run"]:
+        TARGETS.extend([
+            f"results/plots/macs2_{peak_mode}/fdr{fdr}/peaks_distance_to_TSS.pdf",
+            f"results/plots/macs2_{peak_mode}/fdr{fdr}/peak_distributions.pdf",
+            f"results/plots/macs2_{peak_mode}/fdr{fdr}/frip.pdf",
+            f"results/macs2_{peak_mode}/fdr{fdr}/frip.csv",
+        ])
 
     return TARGETS
 
@@ -33,4 +43,58 @@ def samples():
     assert(len(SAMPLES) > 0), "No samples found in config/samples.csv"
     
     return SAMPLES
-        
+
+
+def ip_samples():
+    """
+    Get all IP samples from config/samples.csv
+    """
+    csv = pd.read_csv("config/samples.csv")
+    return csv["sample"].tolist()
+
+
+def control_samples():
+    """
+    Get all input samples from config/samples.csv
+    """
+    csv = pd.read_csv("config/samples.csv")
+    return csv["control"].tolist()
+
+
+def conditions(exclude_controls=True):
+    """
+    Get all unique IP sample names from config/samples.csv
+    """
+    # Remove underscore and trailing numbers from IP sample names
+    if exclude_controls:    
+        return list(set([re.sub(r"_*[0-9]+$","",x) for x in IP_SAMPLES]))
+    else:
+        return list(set([re.sub(r"_*[0-9]+$","",x) for x in SAMPLES]))
+
+
+def macs2_params():
+    """
+    Returns MACS2 parameters based on the genome and mode
+    (narrow or broad) specified in the config file.
+    """
+    format_ = "BAMPE"
+    
+    if "hg" in resources.genome:
+        genome = "hs"
+    elif "mm" in resources.genome:
+        genome = "mm"
+    elif "dm" in resources.genome:
+        genome = "dm"
+    
+    if peak_mode == "broad":
+        cutoff = config["macs2"]["broad_cutoff"]
+        broad = f"--broad --broad-cutoff {cutoff} "
+        qvalue= ""
+    else:
+        broad = ""
+        qvalue = config["macs2"]["qvalue"]
+        qvalue = f"-q {qvalue}"
+    
+    extra = config["macs2"]["extra"]
+
+    return f"-f {format_} -g {genome} {qvalue} {broad} {extra}"
