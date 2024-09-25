@@ -1,4 +1,73 @@
-# Main entrypoint of the workflow. 
-# Please follow the best practices: 
-# https://snakemake.readthedocs.io/en/stable/snakefiles/best_practices.html,
-# in particular regarding the standardized folder structure mentioned there. 
+include: "scripts/general_functions.smk"
+import os
+import re
+import datetime
+import pandas as pd
+from scripts.resources import Resources
+from snakemake.utils import min_version, validate
+from snakemake.logging import logger
+from snakemake.shell import shell
+
+report: "report/workflow.rst"
+
+# Workflow version
+VERSION = "v0.5.0"
+
+#report: "report/workflow.rst"
+
+# Set minimum snakemake version
+min_version("8.13.0")
+
+# Wrapper version
+wrapper_version = "v4.5.0"
+
+logger.info(f"Workflow version: {VERSION}")
+logger.info(f"Wrapper version: {wrapper_version}")
+
+# Define Docker container for Apptainer usage
+containerized: f"docker://niekwit/rip-seq:{VERSION}"
+
+# Load and validate config file
+configfile: "config/config.yaml"
+#validate(config, "schemas/config.schema.yaml")
+
+if config["macs2"]["run"]:
+    if config["macs2"]["regions"] == "narrow":
+            peak_mode = "narrow"
+            fdr = config["macs2"]["qvalue"]
+    else:
+        peak_mode = "broad"
+        fdr = config["macs2"]["broad_cutoff"]
+    logger.info(f"MAC2S {peak_mode} peak calling selected with qvalue {fdr}")
+
+# Load genome resources to be used in rules
+resources = Resources(config["genome"], config["ensembl_genome_build"])
+
+SAMPLES = samples()
+IP_SAMPLES = ip_samples()
+CONTROL_SAMPLES = control_samples()
+CONDITIONS = conditions()
+
+include: "rules/resources.smk"
+include: "rules/umi_tools.smk"
+include: "rules/trim.smk"
+include: "rules/align.smk"
+include: "rules/deeptools.smk"
+include: "rules/macs2.smk"
+
+# Target rule
+rule all:
+    input: 
+        targets()
+
+# Save snakemake terminal output to log file
+time = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+snake_log = f"logs/snakemake/{time}_snakemake.log"
+os.makedirs("logs/snakemake", exist_ok=True)
+
+onsuccess: 
+    shell("cp -v {log} {snake_log}")
+    print("Analysis finished successfully!")
+onerror:
+    shell("cp -v {log} {snake_log}")
+    print(f"Analysis failed...\nCheck {snake_log} for details")
