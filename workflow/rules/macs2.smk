@@ -50,7 +50,7 @@ rule peak_annotation_plots:
     output:
         dt=f"results/plots/macs2_{peak_mode}/fdr{fdr}/peaks_distance_to_TSS.pdf",
         fd=f"results/plots/macs2_{peak_mode}/fdr{fdr}/peak_distributions.pdf",
-    log: f"logs/plots/macs2_{peak_mode}/fdr{fdr}/peak_annotation_plots.log"
+    log: f"logs/plotting/macs2_{peak_mode}/fdr{fdr}/peak_annotation_plots.log"
     threads: 4
     resources:
         runtime=45
@@ -91,7 +91,6 @@ rule count_reads_in_peaks:
         "-b stdin | "
         "awk '{{i+=$NF}}END{{print i}}' > "
         "{output.peak_read_count} "
-        "{log}"
 
 
 rule plot_fraction_of_reads_in_peaks:
