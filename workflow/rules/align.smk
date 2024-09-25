@@ -21,12 +21,14 @@ rule hisat2_align:
 
 rule filter_bam:
 # Filter out too long reads
+# https://accio.github.io/bioinformatics/2020/03/10/filter-bam-by-insert-size.html
     input:
         "results/mapped/{sample}.bam",
     output:
         pipe("results/mapped/filtered/{sample}.bam"),
     params:
-        cutoff=500,
+        upper_cutoff=500,
+        lower_cutoff=10,
     log:
         "logs/samtools/filter/{sample}.log",
     threads: 2
@@ -37,8 +39,8 @@ rule filter_bam:
     shell:
         "samtools view -h {input} | "
         "awk 'substr($0,1,1)=="
-        '"@" || ($9>= 0 && $9<={params.cutoff}) || '
-        "($9<=0 && $9>=-{params.cutoff})'"
+        '"@" || ($9>= {params.lower_cutoff} && $9<={params.upper_cutoff}) || '
+        "($9<={params.lower_cutoff} && $9>=-{params.upper_cutoff})'"
         " | samtools view -b - > {output}"
 
 
