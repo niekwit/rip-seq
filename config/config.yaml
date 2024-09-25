@@ -9,4 +9,13 @@ bigwig:
   binSize: 50
   normalizeUsing: RPKM # RPKM, CPM, BPM, RPGC or None
   extendReads: ""
-  
+macs2:
+  run: True
+  qvalue: 0.05
+  regions: narrow #broad or narrow
+  broad_cutoff: 0.1
+  extra: ""
+consensus_peaks:
+  max_size: 100 # Maximum size of peaks to be extended
+  extend_by: 100 # Number of bp to extend peaks on either side
+  keep: 2 # Minimum number peaks that must overlap to keep  
