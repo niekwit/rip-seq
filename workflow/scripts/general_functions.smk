@@ -3,6 +3,7 @@ def targets():
         "results/plots/PCA.pdf",
         "results/plots/scree.pdf",
         "results/plots/alignment_rates.pdf",
+        "results/plots/fragment_lengths.pdf",
         expand("results/bigwig/average_bw/{sample_group}.bw", sample_group=conditions(exclude_controls=False)),
         ]
 
