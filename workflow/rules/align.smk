@@ -4,14 +4,14 @@ rule hisat2_align:
                "results/trimmed/{sample}_R2_001.umi.fastq.gz"],
         idx=f"resources/index_{resources.genome}/",
     output:
-        "results/mapped/{sample}.bam",
+        pipe("results/mapped/{sample}.bam"),
     params:
         idx=f"resources/index_{resources.genome}/index",
         extra="",
     log:
         "logs/hisat2/align/{sample}.log",
     params:
-        extra="-X 1000",
+        extra="",
     threads: 12
     resources:
         runtime=60,
@@ -19,9 +19,32 @@ rule hisat2_align:
         "v4.5.0/bio/hisat2/align"
 
 
-rule sort_bam:
+rule filter_bam:
+# Filter out too long reads
     input:
         "results/mapped/{sample}.bam",
+    output:
+        pipe("results/mapped/filtered/{sample}.bam"),
+    params:
+        cutoff=500,
+    log:
+        "logs/samtools/filter/{sample}.log",
+    threads: 2
+    resources:
+        runtime=15,
+    conda:
+        "../envs/umi_tools.yaml"
+    shell:
+        "samtools view -h {input} | "
+        "awk 'substr($0,1,1)=="
+        '"@" || ($9>= 0 && $9<={params.cutoff}) || '
+        "($9<=0 && $9>=-{params.cutoff})'"
+        " | samtools view -b - > {output}"
+
+
+rule sort_bam:
+    input:
+        "results/mapped/filtered/{sample}.bam",
     output:
         "results/mapped/sorted/{sample}.bam",
     log:
@@ -64,7 +87,7 @@ rule plot_alignment_rates:
     params:
         extra="",
     log:
-        "logs/hisat2/plot_alignment_rates.log",
+        "logs/plotting/alignment_rates.log",
     threads: 1
     resources:
         runtime=5,
