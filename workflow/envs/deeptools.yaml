@@ -6,3 +6,8 @@ channels:
 dependencies:
   - bioconda::deeptools=3.5.5
   - conda-forge::pigz=2.8
+  - pandas=2.0.0
+  - bedtools=2.31.0
+  - pybedtools 0.10.0
+  - wiggletools=1.2.11
+  - ucsc-wigtobigwig=447
