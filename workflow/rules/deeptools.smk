@@ -26,6 +26,39 @@ rule bigwig:
         "> {log} 2>&1"
 
 
+rule average_wig:
+    input:
+        expand("results/bigwig/{sample}.bw", sample=SAMPLES),
+    output:
+        wig=temp(f"results/bigwig/average_bw/{{sample_group}}.wig"),
+    threads: 2
+    resources:
+        runtime=20
+    log:
+        "logs/wiggletools/{sample_group}.log"
+    conda:
+        "../envs/deeptools.yaml"
+    script:
+        "../scripts/average_wig.py"
+
+
+rule wig2bigwig:
+    input:
+        wig="results/bigwig/average_bw/{sample_group}.wig",
+        cs=f"resources/{resources.genome}_chrom.sizes",
+    output:
+        "results/bigwig/average_bw/{sample_group}.bw",
+    threads: 2
+    resources:
+        runtime=20
+    log:
+        "logs/wigToBigWig/{sample_group}.log"
+    conda:
+        "../envs/deeptools.yaml"
+    shell:
+        "wigToBigWig {input.wig} {input.cs} {output}"
+
+
 rule bigwig_summary:
     input:
         bw=expand("results/bigwig/{sample}.bw", sample=SAMPLES),
@@ -41,7 +74,7 @@ rule bigwig_summary:
     conda:
         "../envs/deeptools.yaml"
     shell:
-        "multiBigwigSummary "
+        "multiBigwigSummary bins "
         "-b {input.bw} "
         "-o {output} "
         "--smartLabels "
