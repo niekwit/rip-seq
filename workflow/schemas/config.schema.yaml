@@ -53,3 +53,50 @@ properties:
       - binSize
       - normalizeUsing
       - extendReads
+
+  macs2:
+    type: object
+    properties:
+      run:
+        type: boolean
+        description: Run MACS2
+      qvalue:
+        type: number
+        maximum: 1
+        minimum: 0
+        description: q-value threshold
+      regions:
+        type: string
+        enum: ["broad", "narrow"]
+        description: Type of regions to call
+      broad_cutoff:
+        type: number
+        maximum: 1
+        minimum: 0
+        description: Broad cutoff
+      extra:
+        type: string
+        description: Additional options for MACS2
+    required:
+      - run
+      - qvalue
+      - regions
+      - broad_cutoff
+      - extra
+
+  consensus_peaks:
+    type: object
+    properties:
+      max_size:
+        type: integer
+        description: Maximum size of peaks to be extended
+      extend_by:
+        type: integer
+        description: Number of bp to extend peaks on either side
+      keep:
+        type: integer
+        description: Minimum number peaks that must overlap to keep
+    required:
+      - max_size
+      - extend_by
+      - keep
