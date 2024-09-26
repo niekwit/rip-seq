@@ -47,6 +47,7 @@ SAMPLES = samples()
 IP_SAMPLES = ip_samples()
 CONTROL_SAMPLES = control_samples()
 CONDITIONS = conditions()
+macs2_params = macs2_params()
 
 include: "rules/resources.smk"
 include: "rules/umi_tools.smk"

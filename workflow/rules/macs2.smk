@@ -9,7 +9,7 @@ rule peak_calling:
         f"_peaks.{peak_mode}Peak", 
         "_peaks.xls"),
     params:
-        macs2_params(),
+        macs2_params,
     threads: 6
     resources: 
         runtime=60
