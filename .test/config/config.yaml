@@ -1,0 +1,21 @@
+genome: hg38
+ensembl_genome_build: 112
+umi_tools:
+  pattern: NNNNNNNN
+cutadapt:
+  adapters: "-a AGATCGGAAGAGCACACGTCTGAACTCCAGTCAC -g CTTCCGATCTACAAGTT -g CTTCCGATCTTGGTCCT -A AACTTGTAGATCGGA -A AGGACCAAGATCGGA -A ACTTGTAGATCGGAA -A GGACCAAGATCGGAA -A CTTGTAGATCGGAAG -A GACCAAGATCGGAAG -A TTGTAGATCGGAAGA -A ACCAAGATCGGAAGA -A TGTAGATCGGAAGAG -A CCAAGATCGGAAGAG -A GTAGATCGGAAGAGC -A CAAGATCGGAAGAGC -A TAGATCGGAAGAGCG -A AAGATCGGAAGAGCG -A AGATCGGAAGAGCGT -A GATCGGAAGAGCGTC -A ATCGGAAGAGCGTCG -A TCGGAAGAGCGTCGT -A CGGAAGAGCGTCGTG -A GGAAGAGCGTCGTGT"
+  extra: "--minimum-length 1 -q 20 --match-read-wildcards --times 1 -e 0.1 --quality-cutoff 6,6 -U 6 -m 18"
+bigwig:
+  binSize: 50
+  normalizeUsing: RPKM # RPKM, CPM, BPM, RPGC or None
+  extendReads: ""
+macs2:
+  run: True
+  qvalue: 0.05
+  regions: narrow #broad or narrow
+  broad_cutoff: 0.1
+  extra: ""
+consensus_peaks:
+  max_size: 100 # Maximum size of peaks to be extended
+  extend_by: 100 # Number of bp to extend peaks on either side
+  keep: 2 # Minimum number peaks that must overlap to keep  
