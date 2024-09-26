@@ -37,6 +37,9 @@ consensus_peaks:
   keep: 2 # Minimum number peaks that must overlap to keep  
 ```
 
+> [!IMPORTANT]  
+> Currently, trimming/UMI processing is optimised for sequencing libraries constructed with SMARTer Stranded Total RNA-Seq Kit V3—Pico Input Mammalian (Takara Bio) or equivalent.
+
 Provide sample information for each replicate in `config/samples.csv`:
 
 | sample | treatment | genotype | control |
