@@ -81,7 +81,7 @@ def macs2_params():
     """
     format_ = "BAMPE"
     
-    if "hg" in resources.genome:
+    if "hg" in resources.genome or resources.genome == "test":
         genome = "hs"
     elif "mm" in resources.genome:
         genome = "mm"
