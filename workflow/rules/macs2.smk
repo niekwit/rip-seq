@@ -48,9 +48,10 @@ rule peak_annotation_plots:
         bed=expand(f"results/macs2_{peak_mode}/fdr{fdr}/consensus_peaks/{{condition}}.bed", zip,  condition=CONDITIONS),
         gtf=resources.gtf,
     output:
-        dt=f"results/plots/macs2_{peak_mode}/fdr{fdr}/peaks_distance_to_TSS.pdf",
-        fd=f"results/plots/macs2_{peak_mode}/fdr{fdr}/peak_distributions.pdf",
-    log: f"logs/plotting/macs2_{peak_mode}/fdr{fdr}/peak_annotation_plots.log"
+        dt=report(f"results/plots/macs2_{peak_mode}/fdr{fdr}/peaks_distance_to_TSS.pdf", caption="../report/distance_to_TSS.rst", category="Peak annotation"),
+        fd=report(f"results/plots/macs2_{peak_mode}/fdr{fdr}/peak_distributions.pdf", caption="../report/feature_distribution.rst", category="Peak annotation"),
+        xlsx=report(f"results/macs2_{peak_mode}/fdr{fdr}/consensus_peaks/peak_annotation.xlsx", caption="../report/peak_annotation.rst", category="Peak annotation"),
+    log: f"logs/macs2_{peak_mode}/fdr{fdr}/peak_annotation.log"
     threads: 4
     resources:
         runtime=45
