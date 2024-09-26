@@ -21,8 +21,9 @@ class Resources:
                 self.blacklist_url = "https://github.com/Boyle-Lab/Blacklist/blob/master/lists/hg19-blacklist.v2.bed.gz"
             elif genome == "hg38":
                 name = "GRCh38"
-                                                
-                self.blacklist_url = "https://github.com/Boyle-Lab/Blacklist/raw/master/lists/hg38-blacklist.v2.bed.gz"
+                
+                # https://www.encodeproject.org/files/ENCFF356LFX/               
+                self.blacklist_url = "https://www.encodeproject.org/files/ENCFF356LFX/@@download/ENCFF356LFX.bed.gz"
                 
             # create URLs for genome files
             self.fasta_url = f"{base_url}fasta/homo_sapiens/dna/Homo_sapiens.{name}.dna.primary_assembly.fa.gz"
