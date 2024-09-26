@@ -85,7 +85,7 @@ rule plot_alignment_rates:
     input:
         expand("logs/hisat2/align/{sample}.log", sample=SAMPLES),
     output:
-        "results/plots/alignment_rates.pdf",
+        report("results/plots/alignment_rates.pdf", caption="../report/alignment_rates.rst", category="Alignment rates"),
     params:
         extra="",
     log:
