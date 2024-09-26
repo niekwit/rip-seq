@@ -12,7 +12,7 @@ bigwig:
 macs2:
   run: True
   qvalue: 0.05
-  regions: narrow #broad or narrow
+  regions: broad #broad or narrow
   broad_cutoff: 0.1
   extra: ""
 consensus_peaks:
