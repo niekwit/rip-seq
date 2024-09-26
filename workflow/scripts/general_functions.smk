@@ -87,6 +87,8 @@ def macs2_params():
         genome = "mm"
     elif "dm" in resources.genome:
         genome = "dm"
+    else:
+        raise ValueError(f"Genome {resources.genome} not supported by MACS2...")
     
     if peak_mode == "broad":
         cutoff = config["macs2"]["broad_cutoff"]
