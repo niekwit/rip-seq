@@ -38,7 +38,13 @@ class Resources:
             # create URLs for genome files
             self.fasta_url = f"{base_url}fasta/mus_musculus/dna/Mus_musculus.{name}.dna.primary_assembly.fa.gz"
             self.gtf_url = f"{base_url}gtf/mus_musculus/Mus_musculus.{name}.{build}.gtf.gz"
-                     
+        
+        elif genome == "test":
+            # create URLs for genome files
+            self.fasta_url = "https://github.com/niekwit/rip-seq/raw/main/.test/resources/Homo_sapiens.GRCh38.dna.primary_assembly_chr13.fa.gz"
+            self.gtf_url = "https://github.com/niekwit/rip-seq/raw/main/.test/resources/Homo_sapiens.GRCh38.112_chr13.gtf.gz"
+            self.blacklist_url = "https://github.com/Boyle-Lab/Blacklist/raw/master/lists/hg38-blacklist.v2.bed.gz"
+            
         # downloaded unzipped file names
         self.fasta = self._file_from_url(self.fasta_url)
         self.gtf = self._file_from_url(self.gtf_url)

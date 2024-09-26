@@ -1,4 +1,4 @@
-genome: hg38
+genome: test
 ensembl_genome_build: 112
 umi_tools:
   pattern: NNNNNNNN
