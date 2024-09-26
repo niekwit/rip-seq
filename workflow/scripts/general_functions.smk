@@ -4,7 +4,7 @@ def targets():
         "results/plots/scree.pdf",
         "results/plots/alignment_rates.pdf",
         "results/plots/fragment_lengths.pdf",
-        f"results/plots/macs2_{peak_mode}/fdr{fdr}/peak_annotation.xlsx",
+        f"results/macs2_{peak_mode}/fdr{fdr}/consensus_peaks/peak_annotation.xlsx",
         expand("results/bigwig/average_bw/{sample_group}.bw", sample_group=conditions(exclude_controls=False)),
         ]
 
