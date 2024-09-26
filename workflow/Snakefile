@@ -18,6 +18,8 @@ VERSION = "v0.5.0"
 # Set minimum snakemake version
 min_version("8.13.0")
 
+macs2_params = macs2_params()
+print(macs2_params)
 # Wrapper version
 wrapper_version = "v4.5.0"
 
@@ -29,7 +31,7 @@ containerized: f"docker://niekwit/rip-seq:{VERSION}"
 
 # Load and validate config file
 configfile: "config/config.yaml"
-#validate(config, "schemas/config.schema.yaml")
+validate(config, "schemas/config.schema.yaml")
 
 if config["macs2"]["run"]:
     if config["macs2"]["regions"] == "narrow":
@@ -47,8 +49,8 @@ SAMPLES = samples()
 IP_SAMPLES = ip_samples()
 CONTROL_SAMPLES = control_samples()
 CONDITIONS = conditions()
-macs2_params = macs2_params()
-print(macs2_params)
+
+
 
 include: "rules/resources.smk"
 include: "rules/umi_tools.smk"
