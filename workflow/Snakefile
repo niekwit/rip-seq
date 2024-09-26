@@ -18,8 +18,24 @@ VERSION = "v0.5.0"
 # Set minimum snakemake version
 min_version("8.13.0")
 
+# Load and validate config file
+configfile: "config/config.yaml"
+validate(config, "schemas/config.schema.yaml")
+
+if config["macs2"]["run"]:
+    if config["macs2"]["regions"] == "narrow":
+        peak_mode = "narrow"
+        fdr = config["macs2"]["qvalue"]
+        value = "qvalue"
+    else:
+        peak_mode = "broad"
+        fdr = config["macs2"]["broad_cutoff"]
+        value = "broad-cutoff"
+    logger.info(f"MAC2S {peak_mode} peak calling selected with {value} {fdr}")
+
 macs2_params = macs2_params()
 print(macs2_params)
+
 # Wrapper version
 wrapper_version = "v4.5.0"
 
@@ -29,19 +45,6 @@ logger.info(f"Wrapper version: {wrapper_version}")
 # Define Docker container for Apptainer usage
 containerized: f"docker://niekwit/rip-seq:{VERSION}"
 
-# Load and validate config file
-configfile: "config/config.yaml"
-validate(config, "schemas/config.schema.yaml")
-
-if config["macs2"]["run"]:
-    if config["macs2"]["regions"] == "narrow":
-            peak_mode = "narrow"
-            fdr = config["macs2"]["qvalue"]
-    else:
-        peak_mode = "broad"
-        fdr = config["macs2"]["broad_cutoff"]
-    logger.info(f"MAC2S {peak_mode} peak calling selected with qvalue {fdr}")
-
 # Load genome resources to be used in rules
 resources = Resources(config["genome"], config["ensembl_genome_build"])
 
@@ -49,8 +52,6 @@ SAMPLES = samples()
 IP_SAMPLES = ip_samples()
 CONTROL_SAMPLES = control_samples()
 CONDITIONS = conditions()
-
-
 
 include: "rules/resources.smk"
 include: "rules/umi_tools.smk"
