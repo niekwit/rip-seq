@@ -79,8 +79,7 @@ def macs2_params():
     Returns MACS2 parameters based on the genome and mode
     (narrow or broad) specified in the config file.
     """
-    format_ = "BAMPE"
-    
+    print(resources.genome)
     if "hg" in resources.genome or resources.genome == "test":
         genome = "hs"
     elif "mm" in resources.genome:
@@ -101,4 +100,4 @@ def macs2_params():
     
     extra = config["macs2"]["extra"]
 
-    return f"-f {format_} -g {genome} {qvalue} {broad} {extra}"
+    return f"-f BAMPE -g {genome} {qvalue} {broad} {extra}"
